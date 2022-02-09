@@ -1,12 +1,15 @@
 ## Used Technologies
+
 - React.js && Next.js
 - Tailwind CSS
-## Used Dependencies 
+
+## Used Dependencies
+
 - GraphQL
-- GraphQL request 
+- GraphQL request
 - HTML-React parser
 - moment
-- React-multi-carousel 
+- React-multi-carousel
 - SASS
 
 ## Preview
@@ -32,5 +35,10 @@ yarn create next-app --example with-tailwindcss with-tailwindcss-app
 ```
 
 Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+
+```bash
+    # To run the server locally use command :
+    npm run dev
+```
 
 # Documentation
