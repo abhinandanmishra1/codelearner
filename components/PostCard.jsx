@@ -2,10 +2,10 @@ import React from 'react'
 import moment from 'moment'
 import Link from 'next/link'
 const PostCard = ({ post }) => {
-  console.log(post)
+  // console.log(post)
   return (
     <div className="mb rounded-lg bg-white p-0 pb-12 shadow-lg lg:p-4 mb-8">
-      <div className="relative mb-6 overflow-hidden pb-80 shadow-md">
+      <div className="relative mb-4 overflow-hidden pb-80 shadow-md">
         <img
           src={post.featuredImage.url}
           alt={post.title}
@@ -13,7 +13,7 @@ const PostCard = ({ post }) => {
         />
       </div>
       <h1
-        className="mb-4 cursor-pointer text-center text-3xl font-semibold
+        className="mb-2 cursor-pointer text-center text-3xl font-semibold
       text-black transition duration-700 hover:text-blue-800"
       >
         <Link href={`/post/${post.slug}`}>{post.title}</Link>
@@ -51,7 +51,7 @@ const PostCard = ({ post }) => {
           </span>
         </div>
       </div>
-      <p className='text-black text-center text-lg text-gray-700 px-4 mb-8'>{post.excerpt}</p>
+      <p className=' text-center text-lg text-gray-700 px-4 mb-8'>{post.excerpt}</p>
       <div className='text-center'>
         <Link href={`/post/${post.slug}`}>
           <span className='transition duration-500 transform hover:-translate-y-1 inline-block bg-blue-700 text-lg font-medium text-white rounded-full px-8 py-3 cursor-pointer'>

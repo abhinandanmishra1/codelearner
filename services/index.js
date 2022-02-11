@@ -1,11 +1,10 @@
 import { request, gql } from 'graphql-request'
 
-const graphqlAPI = process.env.CODELEARNER_ENDPOINT
+const graphqlAPI =
+  'https://api-ap-south-1.graphcms.com/v2/ckz6yhy9501t801z5eym547kp/master'
 console.log(graphqlAPI)
-
 export const getPosts = async () => {
   // query is made from graph cms
-
   const query = gql`
     query MyQuery {
       postsConnection {
@@ -35,11 +34,48 @@ export const getPosts = async () => {
       }
     }
   `
-  console.log(graphqlAPI)
   // faced a problem here in fetching the data
   // make sure you have written everything correctly
   // and you have given permissions to access the api
   const result = await request(graphqlAPI, query)
-
+  console.log(graphqlAPI)
   return result.postsConnection.edges
+}
+
+export const getRecentPosts = async () => {
+  const query = gql`
+    query MyQuery {
+      posts(orderBy: createdAt_ASC, last: 3) {
+        title
+        featuredImage {
+          url
+        }
+        createdAt
+        slug
+      }
+    }
+  `
+  console.log(graphqlAPI)
+  const result = await request(graphqlAPI, query)
+  return result.posts
+}
+
+export const getSimilarPosts = async () => {
+  const query = gql`
+   query GetPostDetails($slug:String!.$categories:[String!]){
+     posts(
+       where:{slug_not:$slug,AND:{categories_some:{slug_in:$categories}}}
+       last:3
+     ){
+      title
+      featuredImage{
+        url
+      }
+      createdAt
+      slug
+    }
+   }
+  `
+  const result = await request(graphqlAPI, query)
+  return result.posts
 }
