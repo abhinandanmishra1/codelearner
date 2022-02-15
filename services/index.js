@@ -129,3 +129,15 @@ export const getCategories = async () => {
   const result = await request(graphqlAPI, query)
   return result.categories
 }
+
+// Comments form
+export const submitComment = async (obj) => {
+  const result = await fetch('/api/comments', {
+    method: 'POST',
+    body: JSON.stringify(obj),
+  })
+  // here we're creating our own api inside the
+  // next js only
+
+  return result.json()
+}
