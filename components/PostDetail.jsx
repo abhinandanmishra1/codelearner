@@ -1,9 +1,10 @@
 import React from 'react'
 import moment from 'moment'
+import Interweave from 'interweave';
 const PostDetail = ({ post }) => {
   const getContentFragment = (index, text, obj, type) => {
     let modifiedText = text;
-
+    
     if (obj) {
       if (obj.bold) {
         modifiedText = (<b key={index}>{text}</b>);
@@ -17,7 +18,7 @@ const PostDetail = ({ post }) => {
         modifiedText = (<u key={index}>{text}</u>);
       }
     }
-
+    console.log(modifiedText,type);
     switch (type) {
       case 'heading-three':
         return <h3 key={index} className="text-xl font-semibold mb-4">{modifiedText.map((item, i) => <React.Fragment key={i}>{item}</React.Fragment>)}</h3>;
@@ -35,6 +36,43 @@ const PostDetail = ({ post }) => {
             src={obj.src}
           />
         );
+      case 'code-block': 
+      return <div className='flex flex-col'>{modifiedText.map((item, i) => {
+        var s="";
+        var finalAns="";
+        var tabSpace="";
+        for(let i=0;i<item.length;i++){
+        if(item[i]!=='\r'){
+            if(item[i]==='<'){
+              s+="&lt;";
+              continue;
+            }
+            if(item[i]==='<'){
+              s+="&gt;";
+              continue;
+            }
+            if(item[i]==="{"){
+              s+="{";
+              tabSpace+="&emsp;";
+              continue;
+            }
+            if(item[i]==="}"){
+              s+="}";
+              tabSpace=tabSpace.substr(0,tabSpace.length-6);
+              continue;
+            }
+            if(item[i]!=='\n'){
+              s+=item[i];
+            }
+            else{
+              finalAns+=`<code>${tabSpace+s}</code>`
+              s="";
+            }
+        }
+        }
+        finalAns+=`<code>${s}</code>`
+        return <Interweave className='flex flex-col' content={finalAns} />
+      })}</div>; 
       default:
         return modifiedText;
     }

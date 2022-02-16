@@ -1,8 +1,7 @@
 import { request, gql } from 'graphql-request'
-
+import { stringify } from 'parse-json'
 const graphqlAPI =
   'https://api-ap-south-1.graphcms.com/v2/ckz6yhy9501t801z5eym547kp/master'
-console.log(graphqlAPI)
 
 export const getPosts = async () => {
   // query is made from graph cms
@@ -39,7 +38,6 @@ export const getPosts = async () => {
   // make sure you have written everything correctly
   // and you have given permissions to access the api
   const result = await request(graphqlAPI, query)
-  console.log(graphqlAPI)
   return result.postsConnection.edges
 }
 export const getPostDetails = async (slug) => {
@@ -72,7 +70,6 @@ export const getPostDetails = async (slug) => {
     }
   `
   const result = await request(graphqlAPI, query, { slug })
-  console.log(result)
   return result.post
 }
 
@@ -89,7 +86,6 @@ export const getRecentPosts = async () => {
       }
     }
   `
-  console.log(graphqlAPI)
   const result = await request(graphqlAPI, query)
   return result.posts
 }
@@ -134,10 +130,26 @@ export const getCategories = async () => {
 export const submitComment = async (obj) => {
   const result = await fetch('/api/comments', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(obj),
   })
-  // here we're creating our own api inside the
-  // next js only
 
-  return result.json()
+  const resultJson = await result.json()
+  return resultJson
+}
+
+export const getComments = async (slug) => {
+  const query = gql`
+    query GetComments($slug: String!) {
+      comments(where: { post: { slug: $slug } }) {
+        name
+        createdAt
+        comment
+      }
+    }
+  `
+  const result = await request(graphqlAPI, query, { slug })
+  return result.comments
 }

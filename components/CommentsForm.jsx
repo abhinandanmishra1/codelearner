@@ -1,11 +1,11 @@
 import React,{useState,useEffect,useRef} from 'react'
 import { submitComment } from '../services';
-const CommentsForm = () => {
+const CommentsForm = (slug) => {
   useEffect(()=>{
     nameEl.current.value=window.localStorage.getItem('name');
     emailEl.current.value=window.localStorage.getItem('email');
   },[])
-  const handlePostSubmission=(slug)=>{
+  const handlePostSubmission=()=>{
       setError(false);
       const {value:comment}=commentEl.current;
       const {value:name}=nameEl.current;
@@ -15,10 +15,8 @@ const CommentsForm = () => {
         setError(true);
         return;
       }
-      // here we're creating although an object 
-      // but we don't have to use name:name
-      // because we have already destructured it earlier
-      const commentObj={name,email,comment,slug};
+      
+      
       if(storeData){
         window.localStorage.setItem('name',name);
         window.localStorage.setItem('email',email);
@@ -26,12 +24,13 @@ const CommentsForm = () => {
         window.localStorage.removeItem('name',name);
         window.localStorage.removeItem('email',email);
       }
+      const commentObj={name,email,comment,slug};
       submitComment(commentObj)
         .then((res)=>{
-          setShowSuccessMessage(true);
-          setTimeout(()=>{
-            setShowSuccessMessage(false);
-          },3000)
+            setShowSuccessMessage(true);
+            setTimeout(()=>{
+              setShowSuccessMessage(false);
+            },3000)
         })
   }
   const [error, setError] = useState(false);

@@ -3,27 +3,42 @@
   to /api/* and will be treated as an api Endpoint instead of page
 
 */
-
-import { GraphQLClient, gql } from 'graphql'
+import { GraphQLClient, gql } from 'graphql-request'
 const graphqlAPI = process.env.CODELEARNER_ENDPOINT
+
 export default async function comments(req, res) {
-  const { name, email, slug, comment } = req.body
+  const graphcmsAuth = process.env.CODELEARNER_AUTH_TOKEN
   const graphQLClient = new GraphQLClient(graphqlAPI, {
     headers: {
-      authorization: `Bearer ${process.env.CODELEARNER_AUTH_TOKEN}`,
+      Authorization: `Bearer ${graphcmsAuth}`,
     },
   })
   // mutation means update data in graphcms
   const query = gql`
-    mutation CreateComment($name:Sting!,$email:String!,$comment:$String!,$slug:String!){
-      createComment(data:{ 
-        name:$name,
-        email:$email,
-        comment:$comment,
-        post:{ connect:{slug:$slug}}
-      })
+    mutation (
+      $name: String!
+      $email: String!
+      $comment: String!
+      $slug: String!
+    ) {
+      createComment(
+        data: {
+          name: $name
+          email: $email
+          comment: $comment
+          post: { connect: { slug: $slug } }
+        }
+      ) {
+        id
+      }
     }
   `
-  const result = await graphQLClient.request(query, req.body)
-  return res.status.send(result)
+  const result = await graphQLClient.request(query, {
+    name: req.body.name,
+    email: req.body.email,
+    comment: req.body.comment,
+    slug: req.body.slug.slug,
+  })
+
+  return res.status(200).send(result)
 }
