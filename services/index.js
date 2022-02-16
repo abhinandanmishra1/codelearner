@@ -1,6 +1,6 @@
 import { request, gql } from 'graphql-request'
-import { stringify } from 'parse-json'
 const graphqlAPI =
+  process.env.CODELEARNER_ENDPOINT ||
   'https://api-ap-south-1.graphcms.com/v2/ckz6yhy9501t801z5eym547kp/master'
 
 export const getPosts = async () => {
